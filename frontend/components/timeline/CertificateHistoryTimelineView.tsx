@@ -267,7 +267,7 @@ export function CertificateHistoryTimelineView({
 
                 {/* Event card */}
                 <div className="flex-1 pb-8">
-                  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 ease-out motion-reduce:transition-none">
                     {/* Event header */}
                     <div 
                       className="p-4 cursor-pointer"

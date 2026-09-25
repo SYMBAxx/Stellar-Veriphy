@@ -13,7 +13,7 @@
  * rendering to sub-components.
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type {
   CertificateLookupMethod,
   CertificateVerificationResult,
@@ -48,7 +48,12 @@ type LookupState =
 // Component
 // ---------------------------------------------------------------------------
 
-export function CertificateVerificationPanel() {
+interface CertificateVerificationPanelProps {
+  /** When set, the certificate is looked up by ID on mount (e.g. opened in a new tab). */
+  initialCertificateId?: string | null;
+}
+
+export function CertificateVerificationPanel({ initialCertificateId }: CertificateVerificationPanelProps = {}) {
   const [lookupState, setLookupState] = useState<LookupState>({ status: "idle" });
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [historyEvents, setHistoryEvents] = useState<HistoryEvent[]>([]);
@@ -102,6 +107,10 @@ export function CertificateVerificationPanel() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (initialCertificateId) handleSearch("id", initialCertificateId);
+  }, [initialCertificateId, handleSearch]);
 
   // ── Authenticity verification handler ───────────────────────────────────────
 
@@ -231,7 +240,7 @@ export function CertificateVerificationPanel() {
             {lookupState.result.certificates.map((cert) => (
               <div
                 key={cert.id}
-                className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:border-blue-300 dark:hover:border-blue-700 transition-colors cursor-pointer"
+                className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:border-blue-300 dark:hover:border-blue-700 transition-colors duration-200 ease-out motion-reduce:transition-none cursor-pointer"
                 onClick={() => {
                   setLookupState({ status: "loading", method: "id", value: cert.id });
                   handleSearch("id", cert.id);
